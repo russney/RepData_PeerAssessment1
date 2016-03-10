@@ -18,7 +18,17 @@ median(clean_steps_day)
 steps_by_interval <- sapply(split(activ$steps, activ$interval), mean, na.rm = TRUE)
 plot(steps_by_interval, type="l")
 
-# show 5 minute interval, on average across all the days, containsthe  maximum number of steps 
+# show 5 minute interval, on average across all the days, contains the maximum number of steps 
 names(steps_by_interval)[steps_by_interval == max(steps_by_interval)]
 
+# calculate total number of missing vlaues 
+sum(is.na(activ$steps))
+
+# using the average for each time interval to fill in the missing values
+for (i in 1:nrow(activ)) {
+  if (is.na(activ$steps[i])) {
+    interval_val <- activ$interval[i]
+    activ$steps[i] <- steps_by_interval[as.character(interval_val)]
+  }
+}
 
